@@ -1,5 +1,5 @@
 <template>
-    <main class="h-screen bg-[#2CB13A] p-12">
+    <main class="h-full min-h-screen bg-[#2CB13A] p-12">
         <div class="mx-auto max-w-[17rem]">
             <img src="@/assets/images/greenChina.jpg" alt="greenChina" />
         </div>

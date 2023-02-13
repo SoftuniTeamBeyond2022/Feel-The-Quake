@@ -1,5 +1,5 @@
 <template>
-    <main class="h-screen bg-red-500 p-12">
+    <main class="h-full min-h-screen bg-red-500 p-12">
         <img class="mx-auto" src="@/assets/images/redChina.png" alt="redChina" />
         <h1 class="text-white font-bold text-4xl text-center mt-12">Did you feel the quake?</h1>
         <NuxtLink to="/quake-form">
