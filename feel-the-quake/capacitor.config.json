@@ -1,0 +1,6 @@
+{
+  "appId": "com.softuni.feelthequake",
+  "appName": "Did You Feel The Quake?",
+  "webDir": "dist",
+  "bundledWebRuntime": false
+}
