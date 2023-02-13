@@ -1,7 +1,7 @@
 <template>
-    <div>
-        <img src="@/assets/images/redChina.webp" alt="redChina" />
-        <h1>Did you feel the quake?</h1>
+    <div class="h-screen bg-red-500">
+    <img src="@/assets/images/redChina.png" alt="redChina" />
+    <h1>Did you feel the quake?</h1>
     </div>
 </template>
 
