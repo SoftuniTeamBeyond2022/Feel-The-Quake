@@ -4,7 +4,7 @@
             <img src="@/assets/images/greenChina.jpg" alt="greenChina" />
         </div>
         <h1 class="text-white font-bold text-4xl text-center mt-12"></h1>
-        <button class="bg-green-300 p-2 w-full mt-14 text-2xl">   
+        <button class=" bg-green-300 p-2 w-full mt-14 text-2xl">   
             What to do next
         </button>
         <button class="bg-yellow-300 p-2 w-full mt-4 text-2xl">   
