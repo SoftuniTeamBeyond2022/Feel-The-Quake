@@ -1,7 +1,7 @@
 <?xml version='1.0' encoding='utf-8'?>
 <resources>
-    <string name="app_name">Did You Feel The Quake?</string>
-    <string name="title_activity_main">Did You Feel The Quake?</string>
-    <string name="package_name">com.softuni.feelthequake</string>
-    <string name="custom_url_scheme">com.softuni.feelthequake</string>
+    <string name="app_name">Feel-the-Quake</string>
+    <string name="title_activity_main">Feel-the-Quake</string>
+    <string name="package_name">com.example.feelthequake</string>
+    <string name="custom_url_scheme">com.example.feelthequake</string>
 </resources>

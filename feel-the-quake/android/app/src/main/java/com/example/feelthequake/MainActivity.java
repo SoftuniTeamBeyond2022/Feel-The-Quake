@@ -1,4 +1,4 @@
-package com.softuni.feelthequake;
+package com.example.feelthequake;
 
 import com.getcapacitor.BridgeActivity;
 

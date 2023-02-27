@@ -1,21 +1,31 @@
 {
+  "name": "feel-the-quake",
+  "version": "0.1.0",
   "private": true,
   "scripts": {
-    "build": "nuxt build",
-    "dev": "nuxt dev",
-    "generate": "nuxt generate",
-    "preview": "nuxt preview",
-    "postinstall": "nuxt prepare"
-  },
-  "devDependencies": {
-    "@capacitor/cli": "^4.6.3",
-    "@nuxtjs/tailwindcss": "^6.4.0",
-    "nuxt": "^3.2.0"
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build"
   },
   "dependencies": {
-    "@capacitor/android": "^4.6.3",
-    "@capacitor/core": "^4.6.3",
-    "@capacitor/ios": "^4.6.3",
-    "nuxt-icon": "^0.3.2"
+    "@capacitor/android": "^4.7.0",
+    "@capacitor/cli": "^4.7.0",
+    "@capacitor/core": "^4.7.0",
+    "@capacitor/ios": "^4.7.0",
+    "autoprefixer": "^10",
+    "core-js": "^3.8.3",
+    "leaflet": "^1.9.3",
+    "postcss": "^8",
+    "tailwindcss": "^3",
+    "vue": "^3.2.13",
+    "vue-router": "^4.0.3"
+  },
+  "devDependencies": {
+    "@iconify/vue": "^4.1.0",
+    "@vue/cli-plugin-babel": "~5.0.0",
+    "@vue/cli-plugin-router": "~5.0.0",
+    "@vue/cli-service": "~5.0.0",
+    "sass": "^1.32.7",
+    "sass-loader": "^12.0.0",
+    "vue-cli-plugin-tailwind": "~3.0.0"
   }
 }
