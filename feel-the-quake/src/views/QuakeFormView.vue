@@ -1,60 +1,3 @@
-<script setup>
-import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
-import { Icon } from '@iconify/vue'
-import leaflet from 'leaflet'
-
-const formIndex = ref(0)
-const selectionIndecies = ref([1, 0, 0, 1])
-const intensity = ref({
-  1: {
-    title: 'Леко тресене',
-    description: 'Вибрации подобни на преминаващ камион или леко раздрусване. Предмети могат да бъдат леко разклатени.'
-  },
-  2: {
-    title: 'Средно тресене',
-    description: 'Малки предмети биват местени или съборени. Стъклата се тресат.'
-  },
-  3: {
-    title: 'Силно тресене',
-    description: 'Ходенето или стоенето прав е трудно. Мебели и вещи биват местени.'
-  },
-  4: {
-    title: 'Много силно тресене',
-    description: 'Ходенето или стоенето прав е невъзможно. Хора и големи предмети биват съборени на земята.'
-  }
-})
-const damage = ref({
-  1: {
-    title: 'Няма поражение',
-    description: 'Няма видимо поражение по околната инфраструктура.'
-  },
-  2: {
-    title: 'Малко поражение',
-    description: 'Малки пукнатини са видими по околната инфраструктура. Пътищата могат да поддържат регулярен трафик.'
-  },
-  3: {
-    title: 'Силно поражение',
-    description: 'Големи пукнатини са видими по околната инфраструктура. Покриви са под риск от разпадане. Пътищата могат да поддържат ограничен трафик.'
-  },
-  4: {
-    title: 'Катастрофално поражение',
-    description: 'Сгради са частично или напълно разрушени. Пътищата са неподходящи или непроходими за трафик.'
-  }
-})
-
-let map
-
-onMounted(() => {
-    map = leaflet.map('map').setView([45.14, 27.50], 6)
-
-    leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        maxZoom: 19,
-        attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map)
-})
-</script>
-
 <template>
     <main class="flex justify-center items-center h-full min-h-screen bg-blue-300">
       <div
@@ -190,5 +133,49 @@ onMounted(() => {
         </div>
       </div>
     </main>
-  </template>
-  
+</template>
+
+<script setup>
+import { ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
+import { Icon } from '@iconify/vue'
+
+const formIndex = ref(0)
+const selectionIndecies = ref([1, 0, 0, 1])
+const intensity = ref({
+  1: {
+    title: 'Леко тресене',
+    description: 'Вибрации подобни на преминаващ камион или леко раздрусване. Предмети могат да бъдат леко разклатени.'
+  },
+  2: {
+    title: 'Средно тресене',
+    description: 'Малки предмети биват местени или съборени. Стъклата се тресат.'
+  },
+  3: {
+    title: 'Силно тресене',
+    description: 'Ходенето или стоенето прав е трудно. Мебели и вещи биват местени.'
+  },
+  4: {
+    title: 'Много силно тресене',
+    description: 'Ходенето или стоенето прав е невъзможно. Хора и големи предмети биват съборени на земята.'
+  }
+})
+const damage = ref({
+  1: {
+    title: 'Няма поражение',
+    description: 'Няма видимо поражение по околната инфраструктура.'
+  },
+  2: {
+    title: 'Малко поражение',
+    description: 'Малки пукнатини са видими по околната инфраструктура. Пътищата могат да поддържат регулярен трафик.'
+  },
+  3: {
+    title: 'Силно поражение',
+    description: 'Големи пукнатини са видими по околната инфраструктура. Покриви са под риск от разпадане. Пътищата могат да поддържат ограничен трафик.'
+  },
+  4: {
+    title: 'Катастрофално поражение',
+    description: 'Сгради са частично или напълно разрушени. Пътищата са неподходящи или непроходими за трафик.'
+  }
+})
+</script>
