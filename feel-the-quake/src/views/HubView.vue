@@ -21,18 +21,22 @@
       </aside>
     </transition>
     <main class="flex justify-between h-full min-h-screen bg-green-100">
-      <ol-map class="w-full" 
-        :loadTilesWhileAnimating="true" 
-        :loadTilesWhileInteracting="true">
-        <ol-view ref="view" 
-          :center="center" 
-          :rotation="rotation" 
-          :zoom="zoom"
-          :projection="projection"  />
+      <ol-map class="w-full" :loadTilesWhileAnimating="true" :loadTilesWhileInteracting="true">
+        <ol-view ref="view" :center="center" :rotation="rotation" :zoom="zoom" :projection="projection" />
 
         <ol-tile-layer>
           <ol-source-osm />
         </ol-tile-layer>
+
+        <ol-vector-layer>
+          <ol-source-vector :url="url" :format="geoJson"></ol-source-vector>
+          <ol-style>
+            <ol-style-circle radius="15">
+              <ol-style-fill :color="'rgba(147, 197, 253, 0.8)'"></ol-style-fill>
+              <ol-style-stroke color="white" :width="1"></ol-style-stroke>
+            </ol-style-circle>
+          </ol-style>
+        </ol-vector-layer>
       </ol-map>
       <section
         class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-screen w-full py-12 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
@@ -68,9 +72,10 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, inject } from 'vue'
 import { Icon } from '@iconify/vue'
 import { Geolocation } from '@capacitor/geolocation';
+import * as olProj from 'ol/proj';
 
 const isNavVisible = ref(false)
 const isTableVisible = ref(false)
@@ -155,9 +160,15 @@ const quakeData = ref([
 ])
 
 const center = ref([0, 0]);
-const projection = ref("EPSG:4326");
+const projection = ref("EPSG:3857");
 const zoom = ref(8);
 const rotation = ref(0);
+const format = inject("ol-format");
+const geoJson = new format.GeoJSON();
+
+const url = ref(
+  "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson"
+);
 
 onMounted(() => {
   const currentPosition = async () => {
@@ -166,34 +177,7 @@ onMounted(() => {
 
   currentPosition()
     .then((position) => {
-      center.value = [position.coords.longitude, position.coords.latitude]
+      center.value = olProj.fromLonLat([position.coords.longitude, position.coords.latitude])
     });
-
-  // currentPosition().then((position) => {
-  //     console.log(position.coords.latitude, position.coords.longitude)
-  //   map = leaflet.map('map').setView([position.coords.latitude, position.coords.longitude], 6)
-
-  //   leaflet.marker([position.coords.latitude, position.coords.longitude]).addTo(map)
-  //       .bindPopup('<p><b><u>Your Location</u></b></p>')
-
-  //   leaflet.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //     maxZoom: 19,
-  //     attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-  //   }).addTo(map)
-
-  //   fetch("https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson")
-  //       .then(response => response.json())
-  //       .then(data => {
-  //         console.log(data.features)
-  //         data.features.forEach((item) => {
-  //           console.log(item.geometry.coordinates[0], item.geometry.coordinates[1])
-  //           leaflet.marker([item.geometry.coordinates[1], item.geometry.coordinates[0]]).addTo(map)
-  //               .bindPopup(`<p><b><u>${item.properties.place}</u></b><br />${new Date(item.properties.time)}<br />${item.geometry.coordinates[1]}°N ${item.geometry.coordinates[0]}°E<br />${item.properties.mag} ${item.geometry.coordinates[2]} км.</p>`)
-  //         })
-  //       })
-  //       .catch(err => {
-  //         console.log(err)
-  //       })
-  // })
 })
 </script>
