@@ -36,14 +36,16 @@
               <ol-style-stroke color="white" :width="1"></ol-style-stroke>
             </ol-style-circle>
           </ol-style>
-          <ol-interaction-select :condition="ol.events.condition.click">
-            <template #select>
-              <ol-popup ref="popup">
-                <div>{{ selectedFeature.get('name') }}</div>
-              </ol-popup>
-            </template>
-          </ol-interaction-select>
         </ol-vector-layer>
+        <ol-overlay :position="[40, 40]">
+          <template v-slot="slotProps">
+            <div class=" bg-red-700">
+              Hello world!<br />
+              Position: {{ slotProps.position }}
+            </div>
+          </template>
+        </ol-overlay>
+        <ol-interaction-select @select="handleSelect" />
       </ol-map>
       <section
         class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-screen w-full py-12 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
@@ -172,10 +174,15 @@ const zoom = ref(8);
 const rotation = ref(0);
 const format = inject("ol-format");
 const geoJson = new format.GeoJSON();
+const popupPosition = ref(undefined);
 
 const url = ref(
   "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson"
 );
+
+function handleSelect(event) {
+  console.log(event)
+}
 
 onMounted(() => {
   const currentPosition = async () => {
