@@ -36,6 +36,13 @@
               <ol-style-stroke color="white" :width="1"></ol-style-stroke>
             </ol-style-circle>
           </ol-style>
+          <ol-interaction-select :condition="ol.events.condition.click">
+            <template #select>
+              <ol-popup ref="popup">
+                <div>{{ selectedFeature.get('name') }}</div>
+              </ol-popup>
+            </template>
+          </ol-interaction-select>
         </ol-vector-layer>
       </ol-map>
       <section
