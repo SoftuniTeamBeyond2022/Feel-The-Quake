@@ -37,11 +37,10 @@
             </ol-style-circle>
           </ol-style>
         </ol-vector-layer>
-        <ol-overlay :position="[40, 40]">
+        <ol-overlay :position="popupPosition">
           <template v-slot="slotProps">
             <div class=" bg-red-700">
-              Hello world!<br />
-              Position: {{ slotProps.position }}
+              {{ quakeLocation }}
             </div>
           </template>
         </ol-overlay>
@@ -175,15 +174,27 @@ const rotation = ref(0);
 const format = inject("ol-format");
 const geoJson = new format.GeoJSON();
 const popupPosition = ref(undefined);
+const quakeLocation = ref("");
+let quakeMagnitude = ref(0);
+let quakeTime = ref("");
+const extent = inject("ol-extent");
 
 const url = ref(
   "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson"
 );
 
 function handleSelect(event) {
-  console.log(event)
+  console.log(event.selected)
+  if (event.selected.length == 1) {
+    popupPosition.value = extent.getCenter(
+      event.selected[0].getGeometry().extent_
+    );
+    quakeLocation.value = event.selected[0].values_.place;
+  } else {
+    quakeLocation.value = "";
+    popupPosition.value = undefined;
+  }
 }
-
 onMounted(() => {
   const currentPosition = async () => {
     return await Geolocation.getCurrentPosition();
