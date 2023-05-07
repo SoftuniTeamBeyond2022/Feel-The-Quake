@@ -17,6 +17,9 @@
         </h1>
         <form class="flex flex-col items-center">
           <div id="map" ref="mapRef" class="h-72 w-full z-10 mb-8"></div>
+          <div class="absolute left-6 z-10 p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-xs">
+            Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors
+          </div>
           <button type="button" @click="formIndex++"
             class="relative flex gap-2 rounded-xl py-2 px-6 border-2 border-sky-200 bg-sky-600 font-semibold text-white text-xl w-fit shadow-md"
             :class="{ 'invisible': markerLocation == null }">
