@@ -36,33 +36,37 @@
         Data &copy; <a href="https://earthquake.usgs.gov/">USGS</a>
       </div>
       <section
-        class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-screen w-full py-12 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
-        :class="{ 'translate-y-[40rem]': !isTableVisible }">
+        class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
+        :style="{ transform: !isTableVisible ? 'translateY(calc(100vh - 10.5rem))' : 'none' }">
         <div
           class="absolute flex justify-center -top-6 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-cyan-700 border-2 border-emerald-400 bg-white shadow"
           @click="isTableVisible = !isTableVisible">
           <Icon class="mb-1 transition-transform duration-200" icon="fa6-solid:chevron-up"
             :class="{ 'rotate-180': isTableVisible }" />
         </div>
-        <h1 class="text-teal-500 font-bold text-4xl text-center drop-shadow-md">Последни земетресения</h1>
-        <table class="text-xs text-center">
-          <tr class="h-10">
-            <th>№</th>
-            <th>Час/дата (GMT)</th>
-            <th>Магнитуд</th>
-            <th>Lat°</th>
-            <th>Lon°</th>
-            <th>Дълб.</th>
-          </tr>
-          <tr class="h-12 border-y-[1px]" v-for="(quake, index) in quakeData" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ quake.dateTime }}</td>
-            <td>{{ quake.magnitude }}</td>
-            <td>{{ quake.latitude }}</td>
-            <td>{{ quake.longitude }}</td>
-            <td>{{ quake.depth }}</td>
-          </tr>
-        </table>
+        <h1 class="text-teal-500 font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
+        <div class=" overflow-auto" style="height: calc(100vh - 13.5rem)">
+          <table class="text-xs text-center w-full">
+            <thead class="h-10 sticky top-0 bg-white">
+              <th>№</th>
+              <th>Час/дата (GMT)</th>
+              <th>Магнитуд</th>
+              <th>Lat°</th>
+              <th>Lon°</th>
+              <th>Дълб.</th>
+            </thead>
+            <tbody>
+              <tr class="h-12 w-full border-y-[1px]" v-for="(quake, index) in quakeData" :key="index">
+                <td>{{ index + 1 }}</td>
+                <td>{{ quake.dateTime }}</td>
+                <td>{{ quake.magnitude }}</td>
+                <td>{{ quake.latitude }}</td>
+                <td>{{ quake.longitude }}</td>
+                <td>{{ quake.depth }}</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
       </section>
     </main>
   </div>
@@ -167,7 +171,42 @@ const quakeData = ref([
     latitude: '45.14°N',
     longitude: '27.50°E',
     depth: '2.0 км.'
-  }
+  },
+  {
+    dateTime: '13:11 26/02/2023',
+    magnitude: 'M=3.0',
+    latitude: '45.14°N',
+    longitude: '27.50°E',
+    depth: '2.0 км.'
+  },
+  {
+    dateTime: '13:11 26/02/2023',
+    magnitude: 'M=3.0',
+    latitude: '45.14°N',
+    longitude: '27.50°E',
+    depth: '2.0 км.'
+  },
+  {
+    dateTime: '13:11 26/02/2023',
+    magnitude: 'M=3.0',
+    latitude: '45.14°N',
+    longitude: '27.50°E',
+    depth: '2.0 км.'
+  },
+  {
+    dateTime: '13:11 26/02/2023',
+    magnitude: 'M=3.0',
+    latitude: '45.14°N',
+    longitude: '27.50°E',
+    depth: '2.0 км.'
+  },
+  {
+    dateTime: '13:11 26/02/2023',
+    magnitude: 'M=3.0',
+    latitude: '45.14°N',
+    longitude: '27.50°E',
+    depth: '2.0 км.'
+  },
 ]);
 
 // Variables for the map and overlay instance,
@@ -262,7 +301,7 @@ onMounted(() => {
     // when a marker is clicked
     const overlay = new Overlay({
       element: overlayRef.value,
-      offset: [-114, 25],
+      offset: [-105, 25],
     });
 
     // Add the instance to the map
@@ -284,7 +323,7 @@ onMounted(() => {
             center: feature.getGeometry().getCoordinates(),
             duration: 1000
           });
-          
+
           // Get the feature properties
           const { place, mag, time } = feature.getProperties();
 
