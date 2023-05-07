@@ -1,7 +1,3 @@
-<script setup>
-import { RouterLink } from 'vue-router'
-</script>
-
 <template>
   <main class="flex justify-center h-full min-h-screen bg-red-400 p-3 pt-36">
         <section
@@ -23,3 +19,7 @@ import { RouterLink } from 'vue-router'
         </section>
     </main>
 </template>
+
+<script setup>
+import { RouterLink } from 'vue-router'
+</script>
