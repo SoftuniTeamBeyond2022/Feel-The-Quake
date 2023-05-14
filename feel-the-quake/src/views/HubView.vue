@@ -15,8 +15,8 @@
         </button>
       </RouterLink>
     </nav>
-    <main class="flex justify-between h-full min-h-screen bg-green-100">
-      <div id="map" ref="mapRef" class="w-full" :class="{ 'invisible': isLoading }"></div>
+    <main class="flex h-full min-h-screen bg-green-100">
+      <div id="map" ref="mapRef" class="w-full"></div>
       <div id="overlay" ref="overlayRef" :class="{ 'invisible': isLoading }">
         <div class="bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-1">
           <div class="col-span-1 flex items-center justify-center">
@@ -215,6 +215,7 @@ const quakeData = ref([
 const mapRef = ref(null);
 const overlayRef = ref(null);
 const overlayContent = ref({
+  id: '',
   place: '',
   mag: 0,
   time: new Date().toLocaleString()
@@ -317,6 +318,7 @@ onMounted(() => {
       map.forEachFeatureAtPixel(event.pixel, (feature) => {
         // If there is a feature found at the clicked position
         if (feature) {
+          console.log(feature);
           // Center the map view on the clicked feature
           const view = map.getView();
           view.animate({
@@ -325,15 +327,16 @@ onMounted(() => {
           });
 
           // Get the feature properties
-          const { place, mag, time } = feature.getProperties();
+          const { ids, place, mag, time } = feature.getProperties();
 
           // If there is no place, magnitude or time,
           // we don't want to display the overlay
-          if (!place || !mag || !time)
+          if (!ids || !place || !mag || !time)
             return;
 
           // Display the overlay and set its content
           overlay.setPosition(event.coordinate);
+          overlayContent.value.id = ids.replace(/,/g, '');
           overlayContent.value.place = place;
           overlayContent.value.mag = mag;
           overlayContent.value.date = new Date(time).toLocaleDateString();
