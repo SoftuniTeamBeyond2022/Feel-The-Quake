@@ -264,7 +264,7 @@ onMounted(() => {
         // The style function sets the marker radius and color
         new VectorLayer({
           source: new VectorSource({
-            url: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary/2.5_week.geojson',
+            url: 'https://www.seismicportal.eu/fdsnws/event/1/query?limit=300&minlat=36.351437&maxlat=45.919546&minlon=18.819906&maxlon=33.260681&format=json',
             format: new GeoJSON(),
           }),
           style: function (feature) {
@@ -325,16 +325,16 @@ onMounted(() => {
           });
 
           // Get the feature properties
-          const { place, mag, time } = feature.getProperties();
+          const { flynn_region, mag, time } = feature.getProperties();
 
           // If there is no place, magnitude or time,
           // we don't want to display the overlay
-          if (!place || !mag || !time)
+          if (!flynn_region || !mag || !time)
             return;
 
           // Display the overlay and set its content
           overlay.setPosition(event.coordinate);
-          overlayContent.value.place = place;
+          overlayContent.value.place = flynn_region;
           overlayContent.value.mag = mag;
           overlayContent.value.date = new Date(time).toLocaleDateString();
         }
