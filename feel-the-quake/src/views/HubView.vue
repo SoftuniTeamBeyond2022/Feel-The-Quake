@@ -4,7 +4,7 @@
       <div class="flex gap-3">
         <img class="w-10 h-fit shrink-0" src="@/assets/logo-squared.png" />
         <div class="w-36 text-xs ">
-          <h1 class="font-bold">НИГГА-БАН | Секция Сеизмология</h1>
+          <h1 class="font-bold">НИГГГ-БАН | Секция Сеизмология</h1>
           <p>Сеизмични събития</p>
         </div>
       </div>
@@ -18,18 +18,20 @@
     <main class="flex h-full min-h-screen bg-green-100">
       <div id="map" ref="mapRef" class="w-full"></div>
       <div id="overlay" ref="overlayRef" :class="{ 'invisible': isLoading }">
-        <div class="bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-1">
-          <div class="col-span-1 flex items-center justify-center">
-            <p class="flex items-center justify-center aspect-square rounded-full text-center text-sm p-3 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
-              :style="{ 'background-color': getColorClass(overlayContent.mag) }">
-              {{ overlayContent.mag.toFixed(1) }}
-            </p>
+        <RouterLink :to="`/earthquake/${overlayContent.id}`">
+          <div class="bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-1">
+            <div class="col-span-1 flex items-center justify-center">
+              <p class="flex items-center justify-center aspect-square rounded-full text-center text-sm p-3 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
+                :style="{ 'background-color': getColorClass(overlayContent.mag) }">
+                {{ overlayContent.mag.toFixed(1) }}
+              </p>
+            </div>
+            <div class="col-span-2">
+              <h1 class="text-bold text-cyan-500 mb-1">{{ overlayContent.place }}</h1>
+              <p>{{ overlayContent.date }}</p>
+            </div>
           </div>
-          <div class="col-span-2">
-            <h1 class="text-bold text-cyan-500 mb-1">{{ overlayContent.place }}</h1>
-            <p>{{ overlayContent.date }}</p>
-          </div>
-        </div>
+        </RouterLink>
       </div>
       <div class="absolute p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
         Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
@@ -302,7 +304,6 @@ onMounted(() => {
     // when a marker is clicked
     const overlay = new Overlay({
       element: overlayRef.value,
-      offset: [-105, 25],
     });
 
     // Add the instance to the map
@@ -327,11 +328,11 @@ onMounted(() => {
           });
 
           // Get the feature properties
-          const { flynn_region, mag, time } = feature.getProperties();
+          const { flynn_region, mag, time, unid } = feature.getProperties();
 
           // If there is no place, magnitude or time,
           // we don't want to display the overlay
-          if (!flynn_region || !mag || !time)
+          if (!flynn_region || !mag || !time || !unid)
             return;
 
           // Display the overlay and set its content
@@ -339,6 +340,7 @@ onMounted(() => {
           overlayContent.value.place = flynn_region;
           overlayContent.value.mag = mag;
           overlayContent.value.date = new Date(time).toLocaleDateString();
+          overlayContent.value.id = unid;
         }
       });
     });

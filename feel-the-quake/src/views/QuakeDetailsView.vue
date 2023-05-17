@@ -6,7 +6,7 @@
                 Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
                 Data &copy; <a href="https://earthquake.usgs.gov/">USGS</a>
             </div> -->
-            <section class="absolute bottom-0 h-36 w-full bg-white">
+            <section class="absolute bottom-0 h-36 w-full bg-white rounded-t-2xl">
             </section>
         </main>
     </div>
@@ -15,6 +15,7 @@
 <script setup>
 // Import the needed libraries
 import { ref, onMounted } from 'vue'
+import { useRoute } from 'vue-router'
 import { Icon } from '@iconify/vue'
 import Map from 'ol/Map';
 import OSM from 'ol/source/OSM';
@@ -30,24 +31,28 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
 
+const route = useRoute()
+const quakeId = ref(route.params.id)
 const mapRef = ref(null);
+
+console.log(`https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`)
 
 // Function to get the color class for the earthquake marker,
 // based on its magnitude
 function getColorClass(mag) {
-  if (mag <= 2.0) {
-    return '#bbf7d0';
-  } else if (mag <= 3.0) {
-    return '#a7f3d0';
-  } else if (mag <= 4.0) {
-    return '#99f6e4';
-  } else if (mag <= 5.0) {
-    return '#bae6fd';
-  } else if (mag <= 6.0) {
-    return '#c7d2fe';
-  } else {
-    return '#fecdd3';
-  }
+    if (mag <= 2.0) {
+        return '#bbf7d0';
+    } else if (mag <= 3.0) {
+        return '#a7f3d0';
+    } else if (mag <= 4.0) {
+        return '#99f6e4';
+    } else if (mag <= 5.0) {
+        return '#bae6fd';
+    } else if (mag <= 6.0) {
+        return '#c7d2fe';
+    } else {
+        return '#fecdd3';
+    }
 }
 
 onMounted(() => {
@@ -65,7 +70,7 @@ onMounted(() => {
             // The style function sets the marker radius and color
             new VectorLayer({
                 source: new VectorSource({
-                    url: 'https://earthquake.usgs.gov/earthquakes/feed/v1.0/detail/us6000kabj.geojson',
+                    url: `https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`,
                     format: new GeoJSON(),
                 }),
                 style: function (feature) {
@@ -96,6 +101,25 @@ onMounted(() => {
             zoom: 5,
         }),
         controls: []
+    });
+
+    // Get the vector source of the GeoJSON layer
+    const vectorSource = map.getLayers().item(1).getSource();
+
+    // Wait for the vector source to load the features
+    vectorSource.once('change', () => {
+        // Get the features from the vector source
+        const features = vectorSource.getFeatures();
+
+        // Check if there is at least one feature
+        if (features.length > 0) {
+            // Get the geometry of the first feature
+            const geometry = features[0].getGeometry();
+            const coordinate = geometry.getCoordinates();
+
+            // Center the map on the coordinates of the first feature
+            map.getView().setCenter(coordinate);
+        }
     });
 });
 </script>
