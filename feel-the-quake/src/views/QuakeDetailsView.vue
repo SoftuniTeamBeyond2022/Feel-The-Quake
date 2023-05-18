@@ -6,8 +6,34 @@
                 Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
                 Data &copy; <a href="https://earthquake.usgs.gov/">USGS</a>
             </div> -->
-            <section class="absolute bottom-0 h-36 w-full bg-white rounded-t-2xl">
+            <section class="grid grid-cols-3 absolute bottom-0 h-36 w-full bg-white rounded-t-2xl border-t-4">
+                <div class="col-span-1 flex items-center justify-center" :class="{'invisible': isLoading}">
+                    <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-6 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
+                        :style="{ 'background-color': getColorClass(overlayContent.mag) }">
+                        {{ overlayContent.mag.toFixed(1) }}
+                    </p>
+                </div>
+                <div class="col-span-2 text-left flex flex-col justify-center" :class="{'invisible': isLoading}">
+                    <h1 class="text-bold text-cyan-500 mb-1 ml-2 text-xl">{{ overlayContent.place }}</h1>
+                    <p class="ml-2">{{ overlayContent.date }}</p>
+                </div>
+                <div class="col-span-3 flex justify-center" :class="{'invisible': isLoading}">
+                    <!-- divider element -->
+                    <div class="w-full h-[0.10rem] mt-4 rounded-full mx-12 bg-neutral-100"></div>
+                </div>
             </section>
+            <RouterLink to="/hub">
+                <button type="button"
+                    class="absolute top-6 left-6 bg-white flex items-center justify-center aspect-square rounded-full w-10 text-xl text-center text-emerald-600 border-[1px] border-neutral-200 shadow">
+                    <Icon icon="fa6-solid:chevron-left" />
+                </button>
+            </RouterLink>
+            <RouterLink to="/quake-form">
+                <button type="button"
+                    class="absolute top-6 right-6 bg-emerald-500 border-2 border-emerald-400 text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
+                    Споделете ваши сведения
+                </button>
+            </RouterLink>
         </main>
     </div>
 </template>
@@ -31,9 +57,15 @@ import { Circle as CircleStyle, Fill, Stroke, Style } from 'ol/style';
 import { fromLonLat } from 'ol/proj';
 
 
-const route = useRoute()
-const quakeId = ref(route.params.id)
+const route = useRoute();
+const isLoading = ref(true);
+const quakeId = ref(route.params.id);
 const mapRef = ref(null);
+const overlayContent = ref({
+    place: '',
+    mag: 0,
+    time: new Date().toLocaleString()
+});
 
 console.log(`https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`)
 
@@ -116,6 +148,21 @@ onMounted(() => {
             // Get the geometry of the first feature
             const geometry = features[0].getGeometry();
             const coordinate = geometry.getCoordinates();
+
+            // Get the feature properties
+            const { flynn_region, mag, time } = features[0].getProperties();
+
+            // If there is no place, magnitude or time,
+            // we don't want to display the overlay
+            if (!flynn_region || !mag || !time)
+                return;
+
+            // Set the overlay content
+            overlayContent.value.place = flynn_region;
+            overlayContent.value.mag = mag;
+            overlayContent.value.date = new Date(time).toLocaleDateString();
+
+            isLoading.value = false;
 
             // Center the map on the coordinates of the first feature
             map.getView().setCenter(coordinate);

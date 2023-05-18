@@ -17,9 +17,9 @@
     </nav>
     <main class="flex h-full min-h-screen bg-green-100">
       <div id="map" ref="mapRef" class="w-full"></div>
-      <div id="overlay" ref="overlayRef" :class="{ 'invisible': isLoading }">
+      <div id="overlay" ref="overlayRef" class="relative" :class="{ 'invisible': isLoading }">
         <RouterLink :to="`/earthquake/${overlayContent.id}`">
-          <div class="bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-1">
+          <div class="relative z-10 bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-1">
             <div class="col-span-1 flex items-center justify-center">
               <p class="flex items-center justify-center aspect-square rounded-full text-center text-sm p-3 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
                 :style="{ 'background-color': getColorClass(overlayContent.mag) }">
@@ -32,10 +32,15 @@
             </div>
           </div>
         </RouterLink>
+        <div class="w-0 h-0 absolute z-0 -bottom-2 left-0 right-0 mx-auto
+                        border-l-[40px] border-l-transparent
+                        border-t-[35px] border-t-white
+                        border-r-[40px] border-r-transparent">
+        </div>
       </div>
       <div class="absolute p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
         Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
-        Data &copy; <a href="https://earthquake.usgs.gov/">USGS</a>
+        Data &copy; <a href="https://earthquake.usgs.gov/">SeismicPortal</a>
       </div>
       <section
         class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
@@ -304,6 +309,8 @@ onMounted(() => {
     // when a marker is clicked
     const overlay = new Overlay({
       element: overlayRef.value,
+      positioning: 'bottom-center',
+      offset: [0, -10],
     });
 
     // Add the instance to the map
