@@ -1,23 +1,32 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import HubView from '../views/HubView.vue'
+import QuakeFormView from '../views/QuakeFormView.vue'
+import QuakeDetailsView from '../views/QuakeDetailsView.vue'
 
 const routes = [
   {
     path: '/',
-    name: 'home',
+    name: 'Home',
     component: HomeView
   },
   {
     path: '/quake-form',
-    name: 'quake-form',
-    component: () => import('../views/QuakeFormView.vue'),
+    name: 'QuakeForm',
+    component: QuakeFormView,
     meta: { transition: 'fade' }
   },
   {
     path: '/hub',
-    name: 'hub',
-    component: () => import('../views/HubView.vue'),
+    name: 'Hub',
+    component: HubView,
     meta: { transition: 'fade' }
+  },
+  {
+    path: "/earthquake/:id",
+    name: "EarthquakeDetails",
+    component: QuakeDetailsView,
+    props: true,
   }
 ]
 

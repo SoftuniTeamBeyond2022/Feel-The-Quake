@@ -4,9 +4,6 @@
 
 @tailwind utilities;
 
-html, body {
-    overflow: hidden;
-}
 
 .fade-enter-active,
 .fade-leave-active {

@@ -1,10 +1,10 @@
 <template>
-  <div class="relative">
+  <div class="relative overflow-hidden h-screen">
     <nav class="h-24 pt-6 pr-8 pl-4 bg-green-100 relative text-emerald-400 flex justify-between">
       <div class="flex gap-3">
         <img class="w-10 h-fit shrink-0" src="@/assets/logo-squared.png" />
         <div class="w-36 text-xs ">
-          <h1 class="font-bold">НИГГА-БАН | Секция Сеизмология</h1>
+          <h1 class="font-bold">НИГГГ-БАН | Секция Сеизмология</h1>
           <p>Сеизмични събития</p>
         </div>
       </div>
@@ -15,25 +15,36 @@
         </button>
       </RouterLink>
     </nav>
-    <main class="flex justify-between h-full min-h-screen bg-green-100">
-      <div id="map" ref="mapRef" class="w-full" :class="{ 'invisible': isLoading }"></div>
-      <div id="overlay" ref="overlayRef" :class="{ 'invisible': isLoading }">
-        <div class="bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-1">
-          <div class="col-span-1 flex items-center justify-center">
-            <p class="flex items-center justify-center aspect-square rounded-full text-center text-sm p-3 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
-              :style="{ 'background-color': getColorClass(overlayContent.mag) }">
-              {{ overlayContent.mag.toFixed(1) }}
-            </p>
+    <main class="flex h-full min-h-screen bg-green-100">
+      <div id="map" ref="mapRef" class="w-full"></div>
+      <div id="overlay" ref="overlayRef" class="relative" :class="{ 'invisible': isLoading }">
+        <RouterLink :to="`/earthquake/${overlayContent.id}`">
+          <div
+            class="relative z-10 bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-x-1 gap-y-2">
+            <div class="col-span-1 flex items-center justify-center">
+              <p class="flex items-center justify-center aspect-square rounded-full text-center text-sm p-3 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
+                :style="{ 'background-color': getColorClass(overlayContent.mag) }">
+                {{ overlayContent.mag.toFixed(1) }}
+              </p>
+            </div>
+            <div class="col-span-2">
+              <h1 class="text-bold text-cyan-500 mb-1">{{ overlayContent.place }}</h1>
+              <p>{{ overlayContent.date }}</p>
+            </div>
+            <div class="col-span-full border-t-2 border-neutral-100 pt-1">
+              <p class="text-center text-cyan-600">Научете повече</p>
+            </div>
           </div>
-          <div class="col-span-2">
-            <h1 class="text-bold text-cyan-500 mb-1">{{ overlayContent.place }}</h1>
-            <p>{{ overlayContent.date }}</p>
-          </div>
+        </RouterLink>
+        <div class="w-0 h-0 absolute z-0 -bottom-2 left-0 right-0 mx-auto
+                                border-l-[40px] border-l-transparent
+                                border-t-[35px] border-t-white
+                                border-r-[40px] border-r-transparent">
         </div>
       </div>
       <div class="absolute p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
         Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
-        Data &copy; <a href="https://earthquake.usgs.gov/">USGS</a>
+        Data &copy; <a href="https://earthquake.usgs.gov/">SeismicPortal</a>
       </div>
       <section
         class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
@@ -215,22 +226,23 @@ const quakeData = ref([
 const mapRef = ref(null);
 const overlayRef = ref(null);
 const overlayContent = ref({
+  id: '',
   place: '',
   mag: 0,
   time: new Date().toLocaleString()
 });
 
 // Function to get the color class for the earthquake marker,
-// based on its magnitude
+// based on its magnitude. 
 function getColorClass(mag) {
   if (mag <= 2.0) {
     return '#bbf7d0';
   } else if (mag <= 3.0) {
-    return '#a7f3d0';
-  } else if (mag <= 4.0) {
     return '#99f6e4';
-  } else if (mag <= 5.0) {
+  } else if (mag <= 4.0) {
     return '#bae6fd';
+  } else if (mag <= 5.0) {
+    return '#bfdbfe';
   } else if (mag <= 6.0) {
     return '#c7d2fe';
   } else {
@@ -269,7 +281,7 @@ onMounted(() => {
           }),
           style: function (feature) {
             const mag = feature.get('mag');
-            const radius = 5 + (mag / 10) * 20;
+            const radius = 5 + (mag / 10) * 15;
             const colorClass = getColorClass(mag);
             return new Style({
               image: new CircleStyle({
@@ -279,8 +291,8 @@ onMounted(() => {
                 }),
                 stroke: new Stroke({
                   color: 'white',
-                  width: 2,
-                  opacity: 0.5
+                  width: 1,
+                  opacity: 0.1
                 }),
               }),
             });
@@ -301,7 +313,8 @@ onMounted(() => {
     // when a marker is clicked
     const overlay = new Overlay({
       element: overlayRef.value,
-      offset: [-105, 25],
+      positioning: 'bottom-center',
+      offset: [0, -10],
     });
 
     // Add the instance to the map
@@ -317,6 +330,7 @@ onMounted(() => {
       map.forEachFeatureAtPixel(event.pixel, (feature) => {
         // If there is a feature found at the clicked position
         if (feature) {
+          console.log(feature);
           // Center the map view on the clicked feature
           const view = map.getView();
           view.animate({
@@ -325,18 +339,19 @@ onMounted(() => {
           });
 
           // Get the feature properties
-          const { flynn_region, mag, time } = feature.getProperties();
+          const { flynn_region, mag, time, unid } = feature.getProperties();
 
           // If there is no place, magnitude or time,
           // we don't want to display the overlay
-          if (!flynn_region || !mag || !time)
+          if (!flynn_region || !mag || !time || !unid)
             return;
 
           // Display the overlay and set its content
-          overlay.setPosition(event.coordinate);
+          overlay.setPosition(feature.getGeometry().getCoordinates());
           overlayContent.value.place = flynn_region;
           overlayContent.value.mag = mag;
           overlayContent.value.date = new Date(time).toLocaleDateString();
+          overlayContent.value.id = unid;
         }
       });
     });
