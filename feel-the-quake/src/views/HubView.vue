@@ -266,11 +266,6 @@ onMounted(() => {
         // Loop through all features and add the following properties to the quakeData array, as a new object:
         // lon, lat, depth, mag, time
         //
-
-        quakeData.value = features.map(feature => {
-          const { mag, time, lon, lat, depth } = feature.getProperties();
-          return { lon, lat, depth, mag, time };
-        });
       }
     });
 
