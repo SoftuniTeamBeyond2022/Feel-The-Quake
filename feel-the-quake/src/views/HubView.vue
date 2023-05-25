@@ -37,9 +37,9 @@
           </div>
         </RouterLink>
         <div class="w-0 h-0 absolute z-0 -bottom-2 left-0 right-0 mx-auto
-                                border-l-[40px] border-l-transparent
-                                border-t-[35px] border-t-white
-                                border-r-[40px] border-r-transparent">
+                                    border-l-[40px] border-l-transparent
+                                    border-t-[35px] border-t-white
+                                    border-r-[40px] border-r-transparent">
         </div>
       </div>
       <div class="absolute p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
@@ -69,10 +69,10 @@
             <tbody>
               <tr class="h-12 w-full border-y-[1px]" v-for="(quake, index) in quakeData" :key="index">
                 <td>{{ index + 1 }}</td>
-                <td>{{ quake.dateTime }}</td>
-                <td>{{ quake.magnitude }}</td>
-                <td>{{ quake.latitude }}</td>
-                <td>{{ quake.longitude }}</td>
+                <td>{{ quake.time }}</td>
+                <td>{{ quake.mag }}</td>
+                <td>{{ quake.lat }}</td>
+                <td>{{ quake.lon }}</td>
                 <td>{{ quake.depth }}</td>
               </tr>
             </tbody>
@@ -107,117 +107,12 @@ const isLoading = ref(true);
 const isTableVisible = ref(false);
 const quakeData = ref([
   {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
+    time: '13:11 26/02/2023',
+    mag: 'M=3.0',
+    lat: '45.14°N',
+    lon: '27.50°E',
     depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
-  {
-    dateTime: '13:11 26/02/2023',
-    magnitude: 'M=3.0',
-    latitude: '45.14°N',
-    longitude: '27.50°E',
-    depth: '2.0 км.'
-  },
+  }
 ]);
 
 // Variables for the map and overlay instance,
@@ -354,6 +249,29 @@ onMounted(() => {
           overlayContent.value.id = unid;
         }
       });
+    });
+
+    // Get the vector source of the GeoJSON earthquake layer
+    const vectorSource = map.getLayers().item(1).getSource();
+
+    // Wait for the vector source to load the features
+    vectorSource.once('change', () => {
+      // Get the features from the vector source
+      const features = vectorSource.getFeatures();
+
+      // Check if there is at least one feature
+      if (features.length > 0) {
+        //
+        // TODO:
+        // Loop through all features and add the following properties to the quakeData array, as a new object:
+        // lon, lat, depth, mag, time
+        //
+
+        quakeData.value = features.map(feature => {
+          const { mag, time, lon, lat, depth } = feature.getProperties();
+          return { lon, lat, depth, mag, time };
+        });
+      }
     });
 
     // Create a new source for vector markers,

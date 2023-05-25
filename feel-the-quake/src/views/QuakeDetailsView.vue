@@ -135,6 +135,8 @@ function getColorClass(mag) {
     }
 }
 
+// The onMounted hook runs when the component is mounted to the website DOM,
+// it allows us to access the DOM (HTML) elements and initialize the map
 onMounted(() => {
     const map = new Map({
         // Reference the mapRef variable in the template to set the map target
@@ -197,7 +199,7 @@ onMounted(() => {
                 }),
                 points: 3,
                 radius: 10,
-                rotation: Math.PI, // rotate the triangle by 180 degrees
+                rotation: Math.PI, // rotate the triangle by 180 degrees ;)
             }),
         }),
     });
