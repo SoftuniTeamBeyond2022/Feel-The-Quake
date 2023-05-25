@@ -150,7 +150,7 @@ onMounted(() => {
             // The style function sets the marker radius and color
             new VectorLayer({
                 source: new VectorSource({
-                    url: `https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`,
+                    url: `https://www.seismicportal.eu/fdsnws/event/1/query?limit=1&eventid=${quakeId.value}&format=json`,
                     format: new GeoJSON(),
                 }),
                 style: function (feature) {
