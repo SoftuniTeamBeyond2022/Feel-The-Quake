@@ -44,13 +44,13 @@
             <ul class="text-cyan-800 text-opacity-90 mx-4 pt-4 pb-10 flex flex-col gap-2" :class="{ 'invisible': isLoading }">
                 <li class="mb-4 font-semibold text-xl">Информация</li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> 3.11° N, 126.75° E
+                    <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> {{ cardContent.lon }}° N, {{ cardContent.lat }}° E
                 </li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:square-caret-down" class="my-auto" /> Дълбочина - 15км
+                    <Icon icon="fa6-solid:square-caret-down" class="my-auto" /> Дълбочина - {{ cardContent.depth }} km
                 </li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:clock" class="my-auto" /> Час/Дата - 22:31 22/05/2023
+                    <Icon icon="fa6-solid:clock" class="my-auto" /> Час/Дата - {{cardContent.time.toLocaleTimeString()}} {{cardContent.time.toLocaleDateString()}}
                 </li>
             </ul>
             <div class="flex" :class="{ 'invisible': isLoading }">
@@ -113,7 +113,29 @@ const cardContent = ref({
     time: new Date('2022-01-01T00:00:00'),
     lon: 0,
     lat: 0,
+    depth: 0,
 });
+
+
+console.log(quakeId.value);
+const apiUrl = `https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`;
+
+fetch(apiUrl)
+  .then(response => response.json())
+  .then(data => {      
+      cardContent.value.place = data.properties.flynn_region;
+      cardContent.value.mag = data.properties.mag;
+      cardContent.value.time = new Date(data.properties.time);
+      cardContent.value.lon = data.geometry.coordinates[0];
+      cardContent.value.lat = data.geometry.coordinates[1];
+      cardContent.value.depth = data.properties.depth;
+      console.log(cardContent.value.place);
+  })
+  .catch(error => {
+    console.log('An error occurred while fetching data:', error);
+  });
+
+
 
 // console.log(`https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`)
 
