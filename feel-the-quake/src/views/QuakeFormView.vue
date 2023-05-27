@@ -6,7 +6,7 @@
         class="absolute top-2 left-3 flex items-center justify-center aspect-square rounded-full w-10 text-xl text-center text-cyan-600 border-[1px] border-neutral-200 shadow">
         <Icon icon="fa6-solid:chevron-left" />
       </button>
-      <RouterLink v-else-if="formIndex < 4" to="/hub">
+      <RouterLink v-else-if="formIndex < 4" to="/">
         <button type="button"
           class="absolute top-2 left-3 flex items-center justify-center aspect-square rounded-full w-10 text-xl text-center text-cyan-600 border-[1px] border-neutral-200 shadow">
           <Icon icon="fa6-solid:x" />
@@ -117,7 +117,7 @@
               качеството на превантивните мерки.</p>
           </div>
           <div class="h-[0.10rem] w-1/2 bg-sky-100 mb-8 mt-16"></div>
-          <RouterLink to="/hub">
+          <RouterLink to="/">
             <button type="button" @click="turnInForm()"
               class="relative rounded-xl py-2 px-6 border-2 border-sky-200 bg-sky-600 font-semibold text-white text-xl w-fit shadow-md">
               Връщане обратно
