@@ -1,6 +1,5 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
-import HubView from '../views/HubView.vue'
 import QuakeFormView from '../views/QuakeFormView.vue'
 import QuakeDetailsView from '../views/QuakeDetailsView.vue'
 
@@ -14,12 +13,6 @@ const routes = [
     path: '/quake-form',
     name: 'QuakeForm',
     component: QuakeFormView,
-    meta: { transition: 'fade' }
-  },
-  {
-    path: '/hub',
-    name: 'Hub',
-    component: HubView,
     meta: { transition: 'fade' }
   },
   {
