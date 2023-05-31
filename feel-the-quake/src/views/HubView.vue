@@ -1,6 +1,6 @@
 <template>
   <div class="relative overflow-hidden h-screen">
-    <nav class="h-24 pt-6 pr-8 pl-4 bg-green-100 relative text-emerald-400 flex justify-between">
+    <nav class="h-24 pt-6 pr-8 pl-4 bg-cyan-100 relative text-cyan-600 flex justify-between">
       <div class="flex gap-3">
         <img class="w-10 h-fit shrink-0" src="@/assets/logo-squared.png" />
         <div class="w-36 text-xs ">
@@ -10,7 +10,7 @@
       </div>
       <RouterLink to="/quake-form">
         <button type="button"
-          class="bg-emerald-500 border-2 border-emerald-400 text-white font-bold h-fit p-3 rounded-xl">Усетих
+          class="bg-teal-500 border-2 border-teal-300 text-white font-bold h-fit p-3 rounded-xl">Усетих
           трус
         </button>
       </RouterLink>
@@ -47,15 +47,15 @@
         Data &copy; <a href="https://earthquake.usgs.gov/">SeismicPortal</a>
       </div>
       <section
-        class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
+        class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white border-[1.5px] border-t-[6px] border-cyan-400 shadow-lg rounded-xl"
         :style="{ transform: !isTableVisible ? 'translateY(calc(100vh - 10.5rem))' : 'none' }">
         <div
-          class="absolute flex justify-center -top-6 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-cyan-700 border-2 border-emerald-400 bg-white shadow"
+          class="absolute flex justify-center -top-6 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-cyan-700 border-2 border-cyan-400 bg-white shadow"
           @click="isTableVisible = !isTableVisible">
           <Icon class="mb-1 transition-transform duration-200" icon="fa6-solid:chevron-up"
             :class="{ 'rotate-180': isTableVisible }" />
         </div>
-        <h1 class="text-teal-500 font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
+        <h1 class="text-cyan-500 font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
         <div class=" overflow-auto" style="height: calc(100vh - 13.5rem)">
           <table class="text-xs text-center w-full">
             <thead class="h-10 sticky top-0 bg-white">
