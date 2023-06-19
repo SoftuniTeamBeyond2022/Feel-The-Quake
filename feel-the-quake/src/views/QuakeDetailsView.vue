@@ -27,19 +27,19 @@
             </div>
         </div>
         <section
-            class="absolute top-[75vh] flex flex-col h-auto w-full bg-white rounded-t-2xl border-t-4 border-2 border-neutral-200">
+            class="absolute top-[75vh] flex flex-col h-auto w-full bg-white rounded-t-2xl border-t-4 border-2 border-cyan-400">
             <div class="flex p-6 gap-5" :class="{ 'invisible': isLoading }">
-                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
+                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 border-[1px] border-cyan-200 shadow"
                     :style="{ 'background-color': getColorClass(cardContent.mag) }">
                     {{ cardContent.mag.toFixed(1) }}
                 </p>
                 <div class="flex flex-col justify-center">
                     <h1 class="text-bold text-cyan-500 mb-1 ml-2 text-xl">{{ cardContent.place }}</h1>
-                    <p class="ml-2">{{ cardContent.time.toLocaleDateString() }}</p>
+                    <p class="ml-2 text-cyan-700">{{ cardContent.time.toLocaleDateString() }}</p>
                 </div>
             </div>
             <div class="flex" :class="{ 'invisible': isLoading }">
-                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-neutral-100"></div>
+                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-cyan-100"></div>
             </div>
             <ul class="text-cyan-800 text-opacity-90 mx-4 pt-4 pb-10 flex flex-col gap-2" :class="{ 'invisible': isLoading }">
                 <li class="mb-4 font-semibold text-xl">Информация</li>
@@ -54,7 +54,7 @@
                 </li>
             </ul>
             <div class="flex" :class="{ 'invisible': isLoading }">
-                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-neutral-100"></div>
+                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-cyan-100"></div>
             </div>
             <p class="text-center text-cyan-700 text-opacity-90 my-2">НИГГГ-БАН | Секция сеизмология</p>
         </section>
@@ -66,7 +66,7 @@
         </RouterLink>
         <RouterLink to="/quake-form">
             <button type="button"
-                class="absolute top-6 right-6 bg-emerald-500 border-2 border-emerald-400 text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
+                class="absolute top-6 right-6 bg-teal-500 border-2 border-teal-400 text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
                 Споделете ваши сведения
             </button>
         </RouterLink>
