@@ -41,16 +41,19 @@
             <div class="flex" :class="{ 'invisible': isLoading }">
                 <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-neutral-100"></div>
             </div>
-            <ul class="text-cyan-800 text-opacity-90 mx-4 pt-4 pb-10 flex flex-col gap-2" :class="{ 'invisible': isLoading }">
+            <ul class="text-cyan-800 text-opacity-90 mx-4 pt-4 pb-10 flex flex-col gap-2"
+                :class="{ 'invisible': isLoading }">
                 <li class="mb-4 font-semibold text-xl">Информация</li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> {{ cardContent.lon }}° N, {{ cardContent.lat }}° E
+                    <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> {{ cardContent.lon }}° N, {{
+                        cardContent.lat }}° E
                 </li>
                 <li class="flex gap-3">
                     <Icon icon="fa6-solid:square-caret-down" class="my-auto" /> Дълбочина - {{ cardContent.depth }} km
                 </li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:clock" class="my-auto" /> Час/Дата - {{cardContent.time.toLocaleTimeString()}} {{cardContent.time.toLocaleDateString()}}
+                    <Icon icon="fa6-solid:clock" class="my-auto" /> Час/Дата - {{ cardContent.time.toLocaleTimeString() }}
+                    {{ cardContent.time.toLocaleDateString() }}
                 </li>
             </ul>
             <div class="flex" :class="{ 'invisible': isLoading }">
@@ -115,27 +118,6 @@ const cardContent = ref({
     lat: 0,
     depth: 0,
 });
-
-
-console.log(quakeId.value);
-const apiUrl = `https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`;
-
-fetch(apiUrl)
-  .then(response => response.json())
-  .then(data => {      
-      cardContent.value.place = data.properties.flynn_region;
-      cardContent.value.mag = data.properties.mag;
-      cardContent.value.time = new Date(data.properties.time);
-      cardContent.value.lon = data.geometry.coordinates[0];
-      cardContent.value.lat = data.geometry.coordinates[1];
-      cardContent.value.depth = data.properties.depth;
-      console.log(cardContent.value.place);
-  })
-  .catch(error => {
-    console.log('An error occurred while fetching data:', error);
-  });
-
-
 
 // console.log(`https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`)
 
@@ -282,11 +264,28 @@ onMounted(() => {
             // Add the new features to the feedback marker layer
             feedbackMarkerLayer.getSource().addFeatures([feature1, feature2, feature3]);
 
-            //
-            //
-            // TODO: Set the card's content from the props of the first feature
-            //
-            //
+            console.log(features[0].getProperties())
+
+            // Get the feature properties
+            const { flynn_region, mag, time, depth } = features[0].getProperties();
+
+            // If there is no place, magnitude or time,
+            // we don't want to display the overlay
+            if (!flynn_region || !mag || !time || !depth)
+                return;
+
+            // Format the longitude and latitude coordinates
+            const lon = coordinate[0].toFixed(2);
+            const lat = coordinate[1].toFixed(2);
+            const formattedLon = lon.slice(0, 2) + lon.slice(lon.indexOf('.'), lon.indexOf('.') + 3);
+            const formattedLat = lat.slice(0, 2) + lat.slice(lat.indexOf('.'), lat.indexOf('.') + 3);
+
+            cardContent.value.place = flynn_region;
+            cardContent.value.mag = mag;
+            cardContent.value.time = new Date(time);
+            cardContent.value.lon = formattedLon;
+            cardContent.value.lat = formattedLat;
+            cardContent.value.depth = depth;
 
             // Center the map on the coordinates of the first feature
             map.getView().setCenter(coordinate);
