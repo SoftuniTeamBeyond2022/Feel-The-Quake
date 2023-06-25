@@ -61,7 +61,7 @@
             </div>
             <p class="text-center text-cyan-700 text-opacity-90 my-2">НИГГГ-БАН | Секция сеизмология</p>
         </section>
-        <RouterLink to="/hub">
+        <RouterLink to="/">
             <button type="button"
                 class="absolute top-6 left-6 bg-white flex items-center justify-center aspect-square rounded-full w-10 text-xl text-center text-cyan-700 border-[1px] border-neutral-200 shadow">
                 <Icon icon="fa6-solid:chevron-left" />
