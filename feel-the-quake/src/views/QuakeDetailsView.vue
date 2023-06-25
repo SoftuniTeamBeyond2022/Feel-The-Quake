@@ -27,34 +27,37 @@
             </div>
         </div>
         <section
-            class="absolute top-[75vh] flex flex-col h-auto w-full bg-white rounded-t-2xl border-t-4 border-2 border-neutral-200">
+            class="absolute top-[75vh] flex flex-col h-auto w-full bg-white rounded-t-2xl border-t-4 border-2 border-cyan-400">
             <div class="flex p-6 gap-5" :class="{ 'invisible': isLoading }">
-                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
+                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 border-[1px] border-cyan-200 shadow"
                     :style="{ 'background-color': getColorClass(cardContent.mag) }">
                     {{ cardContent.mag.toFixed(1) }}
                 </p>
                 <div class="flex flex-col justify-center">
                     <h1 class="text-bold text-cyan-500 mb-1 ml-2 text-xl">{{ cardContent.place }}</h1>
-                    <p class="ml-2">{{ cardContent.time.toLocaleDateString() }}</p>
+                    <p class="ml-2 text-cyan-700">{{ cardContent.time.toLocaleDateString() }}</p>
                 </div>
             </div>
             <div class="flex" :class="{ 'invisible': isLoading }">
-                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-neutral-100"></div>
+                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-cyan-100"></div>
             </div>
-            <ul class="text-cyan-800 text-opacity-90 mx-4 pt-4 pb-10 flex flex-col gap-2" :class="{ 'invisible': isLoading }">
+            <ul class="text-cyan-800 text-opacity-90 mx-4 pt-4 pb-10 flex flex-col gap-2"
+                :class="{ 'invisible': isLoading }">
                 <li class="mb-4 font-semibold text-xl">Информация</li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> 3.11° N, 126.75° E
+                    <Icon icon="fa6-solid:location-crosshairs" class="my-auto" /> {{ cardContent.lon }}° N, {{
+                        cardContent.lat }}° E
                 </li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:square-caret-down" class="my-auto" /> Дълбочина - 15км
+                    <Icon icon="fa6-solid:square-caret-down" class="my-auto" /> Дълбочина - {{ cardContent.depth }} km
                 </li>
                 <li class="flex gap-3">
-                    <Icon icon="fa6-solid:clock" class="my-auto" /> Час/Дата - 22:31 22/05/2023
+                    <Icon icon="fa6-solid:clock" class="my-auto" /> Час/Дата - {{ cardContent.time.toLocaleTimeString() }}
+                    {{ cardContent.time.toLocaleDateString() }}
                 </li>
             </ul>
             <div class="flex" :class="{ 'invisible': isLoading }">
-                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-neutral-100"></div>
+                <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-cyan-100"></div>
             </div>
             <p class="text-center text-cyan-700 text-opacity-90 my-2">НИГГГ-БАН | Секция сеизмология</p>
         </section>
@@ -66,7 +69,7 @@
         </RouterLink>
         <RouterLink to="/quake-form">
             <button type="button"
-                class="absolute top-6 right-6 bg-emerald-500 border-2 border-emerald-400 text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
+                class="absolute top-6 right-6 bg-teal-500 border-2 border-teal-400 text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
                 Споделете ваши сведения
             </button>
         </RouterLink>
@@ -113,6 +116,7 @@ const cardContent = ref({
     time: new Date('2022-01-01T00:00:00'),
     lon: 0,
     lat: 0,
+    depth: 0,
 });
 
 // console.log(`https://www.seismicportal.eu/fdsnws/event/1/query?limit=10&eventid=${quakeId.value}&format=json`)
@@ -260,11 +264,28 @@ onMounted(() => {
             // Add the new features to the feedback marker layer
             feedbackMarkerLayer.getSource().addFeatures([feature1, feature2, feature3]);
 
-            //
-            //
-            // TODO: Set the card's content from the props of the first feature
-            //
-            //
+            console.log(features[0].getProperties())
+
+            // Get the feature properties
+            const { flynn_region, mag, time, depth } = features[0].getProperties();
+
+            // If there is no place, magnitude or time,
+            // we don't want to display the overlay
+            if (!flynn_region || !mag || !time || !depth)
+                return;
+
+            // Format the longitude and latitude coordinates
+            const lon = coordinate[0].toFixed(2);
+            const lat = coordinate[1].toFixed(2);
+            const formattedLon = lon.slice(0, 2) + lon.slice(lon.indexOf('.'), lon.indexOf('.') + 3);
+            const formattedLat = lat.slice(0, 2) + lat.slice(lat.indexOf('.'), lat.indexOf('.') + 3);
+
+            cardContent.value.place = flynn_region;
+            cardContent.value.mag = mag;
+            cardContent.value.time = new Date(time);
+            cardContent.value.lon = formattedLon;
+            cardContent.value.lat = formattedLat;
+            cardContent.value.depth = depth;
 
             // Center the map on the coordinates of the first feature
             map.getView().setCenter(coordinate);
