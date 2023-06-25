@@ -261,11 +261,28 @@ onMounted(() => {
 
       // Check if there is at least one feature
       if (features.length > 0) {
-        //
-        // TODO:
-        // Loop through all features and add the following properties to the quakeData array, as a new object:
-        // lon, lat, depth, mag, time
-        //
+        // Loop through all features and map the following properties to the quakeData array, as a new object: lon, lat, depth, mag, time.
+        quakeData.value = features.map(feature => {
+          let { lon, lat, depth, mag, time } = feature.getProperties();
+
+          console.log(mag)
+          lon = `${lon}°N`;
+          lat = `${lat}°E`;
+          depth = `${depth.toFixed(1)} km`;
+          mag = `M=${mag.toFixed(1)}`;
+
+          const formattedTime = new Date(time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+          const formattedDate = new Date(time).toLocaleDateString();
+          time = `${formattedTime} ${formattedDate}`;
+
+          return {
+            lon,
+            lat,
+            depth,
+            mag,
+            time
+          }
+        });
       }
     });
 
