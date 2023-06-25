@@ -106,13 +106,6 @@ import { fromLonLat } from 'ol/proj';
 const isLoading = ref(true);
 const isTableVisible = ref(false);
 const quakeData = ref([
-  {
-    time: '13:11 26/02/2023',
-    mag: 'M=3.0',
-    lat: '45.14°N',
-    lon: '27.50°E',
-    depth: '2.0 км.'
-  }
 ]);
 
 // Variables for the map and overlay instance,
@@ -261,11 +254,25 @@ onMounted(() => {
 
       // Check if there is at least one feature
       if (features.length > 0) {
-        //
-        // TODO:
-        // Loop through all features and add the following properties to the quakeData array, as a new object:
-        // lon, lat, depth, mag, time
-        //
+        // Loop through all features and map the following properties to the quakeData array, as a new object: lon, lat, depth, mag, time.
+        quakeData.value = features.map(feature => {
+          let { lon, lat, depth, mag, time } = feature.getProperties();
+          console.log(mag)
+          lon = `${lon}°N`;
+          lat = `${lat}°E`;
+          depth = `${depth.toFixed(1)} km`;
+          mag = `M=${mag.toFixed(1)}`;
+          const formattedTime = new Date(time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
+          const formattedDate = new Date(time).toLocaleDateString();
+          time = `${formattedTime} ${formattedDate}`;
+          return {
+            lon,
+            lat,
+            depth,
+            mag,
+            time
+          }
+        });
       }
     });
 
