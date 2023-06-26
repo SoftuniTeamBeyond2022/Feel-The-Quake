@@ -1,6 +1,6 @@
 <template>
   <div class="relative overflow-hidden h-screen">
-    <nav class="h-24 pt-6 pr-8 pl-4 bg-green-100 relative text-emerald-400 flex justify-between">
+    <nav class="relative z-40 h-24 pt-6 pr-8 pl-4 bg-white bg-opacity-90 text-quakeGreen flex justify-between">
       <div class="flex gap-3">
         <img class="w-10 h-fit shrink-0" src="@/assets/logo-squared.png" />
         <div class="w-36 text-xs ">
@@ -10,17 +10,17 @@
       </div>
       <RouterLink to="/quake-form">
         <button type="button"
-          class="bg-emerald-500 border-2 border-emerald-400 text-white font-bold h-fit p-3 rounded-xl">Усетих
+          class="bg-quakeGreen text-white font-bold h-fit p-3 rounded-xl">Усетих
           трус
         </button>
       </RouterLink>
     </nav>
-    <main class="flex h-full min-h-screen bg-green-100">
-      <div id="map" ref="mapRef" class="w-full"></div>
+    <main class="flex h-full min-h-screen bg-quakeGreen-background">
+      <div id="map" ref="mapRef" class="w-full z-0 absolute inset-0"></div>
       <div id="overlay" ref="overlayRef" class="relative" :class="{ 'invisible': isLoading }">
         <RouterLink :to="`/earthquake/${overlayContent.id}`">
           <div
-            class="relative z-10 bg-white text-sky-900 text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-x-1 gap-y-2">
+            class="relative z-10 bg-white text-quakeGreen-dark text-xs rounded-lg p-2 w-[13rem] grid grid-cols-3 gap-x-1 gap-y-2">
             <div class="col-span-1 flex items-center justify-center">
               <p class="flex items-center justify-center aspect-square rounded-full text-center text-sm p-3 font-bold text-cyan-700 border-[1px] border-neutral-200 shadow"
                 :style="{ 'background-color': getColorClass(overlayContent.mag) }">
@@ -28,11 +28,11 @@
               </p>
             </div>
             <div class="col-span-2">
-              <h1 class="text-bold text-cyan-500 mb-1">{{ overlayContent.place }}</h1>
+              <h1 class="text-bold text-quakeGreen mb-1">{{ overlayContent.place }}</h1>
               <p>{{ overlayContent.date }}</p>
             </div>
             <div class="col-span-full border-t-2 border-neutral-100 pt-1">
-              <p class="text-center text-cyan-600">Научете повече</p>
+              <p class="text-center font-medium text-quakeGreen">Научете повече</p>
             </div>
           </div>
         </RouterLink>
@@ -42,20 +42,20 @@
                                     border-r-[40px] border-r-transparent">
         </div>
       </div>
-      <div class="absolute p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
+      <div class="absolute top-24 p-2 m-1 bg-white bg-opacity-40 rounded-lg text-teal-800 text-sm">
         Tiles &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors<br>
         Data &copy; <a href="https://earthquake.usgs.gov/">SeismicPortal</a>
       </div>
       <section
-        class="absolute transition-transform duration-500 z-40 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white border-[1.5px] border-t-[6px] border-emerald-400 shadow-lg rounded-xl"
-        :style="{ transform: !isTableVisible ? 'translateY(calc(100vh - 10.5rem))' : 'none' }">
+        class="absolute z-50 transition-transform duration-500 left-0 right-0 flex flex-col gap-10 h-[64rem] w-full py-6 px-3 bg-white bg-opacity-90 shadow-lg border-t-4 rounded-[2rem]"
+        :style="{ transform: !isTableVisible ? 'translateY(calc(100vh - 11rem))' : 'none' }">
         <div
-          class="absolute flex justify-center -top-6 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-cyan-700 border-2 border-emerald-400 bg-white shadow"
+          class="absolute flex justify-center -top-6 left-0 right-0 mx-auto rounded-full w-24 text-4xl font-bold text-quakeGreen border-2 bg-white shadow"
           @click="isTableVisible = !isTableVisible">
           <Icon class="mb-1 transition-transform duration-200" icon="fa6-solid:chevron-up"
             :class="{ 'rotate-180': isTableVisible }" />
         </div>
-        <h1 class="text-teal-500 font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
+        <h1 class="text-quakeGreen font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
         <div class=" overflow-auto" style="height: calc(100vh - 13.5rem)">
           <table class="text-xs text-center w-full">
             <thead class="h-10 sticky top-0 bg-white">
@@ -128,7 +128,7 @@ function getColorClass(mag) {
     } else if (mag <= 3.0) {
         return '#99f6e4';
     } else if (mag <= 4.0) {
-        return '#6ee7b7';
+        return '#a5f3fc';
     } else if (mag <= 5.0) {
         return '#bfdbfe';
     } else if (mag <= 6.0) {
