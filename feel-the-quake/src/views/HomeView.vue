@@ -123,19 +123,19 @@ const overlayContent = ref({
 // Function to get the color class for the earthquake marker,
 // based on its magnitude. 
 function getColorClass(mag) {
-  if (mag <= 2.0) {
-    return '#bbf7d0';
-  } else if (mag <= 3.0) {
-    return '#99f6e4';
-  } else if (mag <= 4.0) {
-    return '#bae6fd';
-  } else if (mag <= 5.0) {
-    return '#bfdbfe';
-  } else if (mag <= 6.0) {
-    return '#c7d2fe';
-  } else {
-    return '#fecdd3';
-  }
+    if (mag <= 2.0) {
+        return '#bbf7d0';
+    } else if (mag <= 3.0) {
+        return '#99f6e4';
+    } else if (mag <= 4.0) {
+        return '#6ee7b7';
+    } else if (mag <= 5.0) {
+        return '#bfdbfe';
+    } else if (mag <= 6.0) {
+        return '#c17777';
+    } else {
+        return '#a73b3b';
+    }
 }
 
 // The onMounted hook runs when the component is mounted to the website DOM,

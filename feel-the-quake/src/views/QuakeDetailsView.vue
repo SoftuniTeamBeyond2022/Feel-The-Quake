@@ -1,6 +1,6 @@
 <template>
-    <main class="flex flex-col h-full bg-green-100">
-        <div id="map" ref="mapRef" class="w-full h-[80vh]" :class="{ 'invisible': isLoading }"></div>
+    <main class="flex flex-col overflow-hidden h-screen bg-quakeGreen-background">
+        <div id="map" ref="mapRef" class="w-full h-screen" :class="{ 'invisible': isLoading }"></div>
         <div id="overlay" ref="overlayRef" class="relative" :class="{ 'invisible': isLoading }">
             <div class="flex flex-col relative z-10 bg-white text-sky-900 text-xs rounded-lg p-2 w-[12rem]">
                 <h1 class="text-sm font-semibold text-cyan-600">Почувствано:</h1>
@@ -26,17 +26,20 @@
                         border-r-[40px] border-r-transparent">
             </div>
         </div>
-        <section
-            class="absolute top-[75vh] flex flex-col h-auto w-full bg-white rounded-t-2xl border-t-4 border-2 border-cyan-400">
-            <div class="flex p-6 gap-5" :class="{ 'invisible': isLoading }">
-                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 border-[1px] border-cyan-200 shadow"
+        <section class="absolute top-52 flex flex-col h-auto w-full bg-white bg-opacity-90 rounded-t-[2.5rem] transition-transform duration-500"
+            :style="{ transform: !isCardVisible ? 'translateY(calc(100vh - 20rem))' : 'none' }">
+            <div class="relative flex p-6 gap-5" :class="{ 'invisible': isLoading }"
+                @click="isCardVisible = !isCardVisible">
+                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 shadow"
                     :style="{ 'background-color': getColorClass(cardContent.mag) }">
                     {{ cardContent.mag.toFixed(1) }}
                 </p>
-                <div class="flex flex-col justify-center">
-                    <h1 class="text-bold text-cyan-500 mb-1 ml-2 text-xl">{{ cardContent.place }}</h1>
-                    <p class="ml-2 text-cyan-700">{{ cardContent.time.toLocaleDateString() }}</p>
+                <div class="flex flex-col w-[50%] justify-center">
+                    <h1 class="font-semibold truncate text-quakeGreen-dark mb-1 ml-2 text-xl">{{ cardContent.place }}</h1>
+                    <p class="ml-2 truncate text-quakeGreen">{{ cardContent.time.toLocaleDateString() }}</p>
                 </div>
+                <Icon class="mb-1 text-3xl text-quakeGreen-dark transition-transform duration-500" icon="fa6-solid:chevron-up"
+                    :class="{ 'rotate-180': isCardVisible }" />
             </div>
             <div class="flex" :class="{ 'invisible': isLoading }">
                 <div class="w-full h-[0.15rem] my-4 rounded-full mx-24 bg-cyan-100"></div>
@@ -61,18 +64,19 @@
             </div>
             <p class="text-center text-cyan-700 text-opacity-90 my-2">НИГГГ-БАН | Секция сеизмология</p>
         </section>
-        <RouterLink to="/">
-            <button type="button"
-                class="absolute top-6 left-6 bg-white flex items-center justify-center aspect-square rounded-full w-10 text-xl text-center text-cyan-700 border-[1px] border-neutral-200 shadow">
-                <Icon icon="fa6-solid:chevron-left" />
-            </button>
-        </RouterLink>
-        <RouterLink to="/quake-form">
-            <button type="button"
-                class="absolute top-6 right-6 bg-teal-500 border-2 border-teal-400 text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
-                Споделете ваши сведения
-            </button>
-        </RouterLink>
+        <header class="absolute top-0 flex justify-between p-4 w-full bg-white bg-opacity-80">
+            <RouterLink to="/">
+                <button type="button"
+                    class="bg-white flex items-center justify-center aspect-square rounded-full w-10 text-xl text-center text-quakeGreen-dark border-[1px] border-neutral-200 shadow">
+                    <Icon icon="fa6-solid:chevron-left" />
+                </button>
+            </RouterLink>
+            <RouterLink to="/quake-form">
+                <button type="button" class="bg-quakeGreen text-white text-sm font-bold h-fit w-36 p-3 rounded-xl">
+                    Споделете ваши сведения
+                </button>
+            </RouterLink>
+        </header>
     </main>
 </template>
 
@@ -110,6 +114,7 @@ const overlayContent = ref({
         value: 0,
     },
 });
+const isCardVisible = ref(false);
 const cardContent = ref({
     place: 'LOREM IPSUM',
     mag: 0,
@@ -129,13 +134,13 @@ function getColorClass(mag) {
     } else if (mag <= 3.0) {
         return '#99f6e4';
     } else if (mag <= 4.0) {
-        return '#bae6fd';
+        return '#10b981';
     } else if (mag <= 5.0) {
         return '#bfdbfe';
     } else if (mag <= 6.0) {
-        return '#c7d2fe';
+        return '#c17777';
     } else {
-        return '#fecdd3';
+        return '#a73b3b';
     }
 }
 
@@ -264,8 +269,6 @@ onMounted(() => {
             // Add the new features to the feedback marker layer
             feedbackMarkerLayer.getSource().addFeatures([feature1, feature2, feature3]);
 
-            console.log(features[0].getProperties())
-
             // Get the feature properties
             const { flynn_region, mag, time, depth } = features[0].getProperties();
 
@@ -316,7 +319,6 @@ onMounted(() => {
         map.forEachFeatureAtPixel(event.pixel, (feature) => {
             // If there is a feature found at the clicked position
             if (feature) {
-                console.log(feature);
                 // Center the map view on the clicked feature
                 const view = map.getView();
                 view.animate({
