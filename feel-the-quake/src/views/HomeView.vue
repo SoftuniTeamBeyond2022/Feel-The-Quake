@@ -164,7 +164,7 @@ onMounted(() => {
         // The style function sets the marker radius and color
         new VectorLayer({
           source: new VectorSource({
-            url: 'https://www.seismicportal.eu/fdsnws/event/1/query?limit=300&minlat=36.351437&maxlat=45.919546&minlon=18.819906&maxlon=33.260681&format=json',
+            url: 'https://www.seismicportal.eu/fdsnws/event/1/query?limit=300&minmag=2.0&minlat=36.351437&maxlat=45.919546&minlon=18.819906&maxlon=33.260681&format=json',
             format: new GeoJSON(),
           }),
           style: function (feature) {
