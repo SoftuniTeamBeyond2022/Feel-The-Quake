@@ -6,7 +6,7 @@
                 <h1 class="text-sm font-semibold text-quakeGreen">Почувствано:</h1>
                 <div class="flex gap-2 pl-2">
                     <p class="flex items-center">- {{ overlayContent.feltScore.description }}</p>
-                    <p class="flex items-center justify-center aspect-square rounded-full text-center text-base p-1 ml-auto font-bold text-white shadow"
+                    <p class="flex items-center justify-center aspect-square rounded-full text-center text-base p-1 w-8 ml-auto font-bold text-white shadow"
                         :style="{ 'background-color': getScoreColorClass(overlayContent.feltScore.value + 1) }">
                         {{ overlayContent.feltScore.value }}
                     </p>
@@ -14,7 +14,7 @@
                 <h1 class="text-sm font-semibold text-quakeGreen border-t-2 mt-2 pt-2">Поражение:</h1>
                 <div class="flex gap-2 pl-2">
                     <p class="flex items-center">- {{ overlayContent.damageScore.description }}</p>
-                    <p class="flex items-center justify-center aspect-square rounded-full text-center text-base p-1 ml-auto font-bold text-white shadow"
+                    <p class="flex items-center justify-center aspect-square rounded-full text-center text-base p-1 w-8 ml-auto font-bold text-white shadow"
                         :style="{ 'background-color': getScoreColorClass(overlayContent.damageScore.value + 1) }">
                         {{ overlayContent.damageScore.value }}
                     </p>
