@@ -59,7 +59,7 @@
           <div class="py-4 border-b-[1px] cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
             <RouterLink :to="`/earthquake/${quake.id}`">
               <div class="relative flex p-2 gap-5 ">
-                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 shadow"
+                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-1 w-20 h-20 font-bold text-cyan-700 shadow"
                   :style="{ 'background-color': getColorClass(quake.mag) }">
                   {{ quake.mag }}
                 </p>
