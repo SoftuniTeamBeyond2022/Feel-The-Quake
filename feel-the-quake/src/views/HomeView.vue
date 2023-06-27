@@ -9,8 +9,7 @@
         </div>
       </div>
       <RouterLink to="/quake-form">
-        <button type="button"
-          class="bg-quakeGreen text-white font-bold h-fit p-3 rounded-xl">Усетих
+        <button type="button" class="bg-quakeGreen text-white font-bold h-fit p-3 rounded-xl">Усетих
           трус
         </button>
       </RouterLink>
@@ -56,28 +55,32 @@
             :class="{ 'rotate-180': isTableVisible }" />
         </div>
         <h1 class="text-quakeGreen font-bold text-xl text-center drop-shadow-md">Последни земетресения</h1>
-        <div class=" overflow-auto" style="height: calc(100vh - 13.5rem)">
-          <table class="text-xs text-center w-full">
-            <thead class="h-10 sticky top-0 bg-white">
-              <th>№</th>
-              <th>Час/дата (GMT)</th>
-              <th>Магнитуд</th>
-              <th>Lat°</th>
-              <th>Lon°</th>
-              <th>Дълб.</th>
-            </thead>
-            <tbody>
-              <tr class="h-12 w-full border-y-[1px]" v-for="(quake, index) in quakeData" :key="index">
-                <td>{{ index + 1 }}</td>
-                <td>{{ quake.time }}</td>
-                <td>{{ quake.mag }}</td>
-                <td>{{ quake.lat }}</td>
-                <td>{{ quake.lon }}</td>
-                <td>{{ quake.depth }}</td>
-              </tr>
-            </tbody>
-          </table>
+        <div class="overflow-y-auto" style="height: calc(100vh - 13.5rem); width: 100%">
+          <div class="py-4 border-b-[1px] cursor-pointer" v-for="(quake, index) in quakeData" :key="index">
+            <RouterLink :to="`/earthquake/${quake.id}`">
+              <div class="relative flex p-2 gap-5 ">
+                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 shadow"
+                  :style="{ 'background-color': getColorClass(quake.mag) }">
+                  {{ quake.mag }}
+                </p>
+                <div class="flex flex-col justify-center">
+                  <h1 class="font-semibold truncate text-quakeGreen-dark mb-1 ml-2 text-base whitespace-normal break-normal">
+                    {{
+                      quake.place }}</h1>
+                  <p class="ml-2 truncate text-quakeGreen">{{ new Date(quake.time).toLocaleDateString() }}</p>
+                </div>
+              </div>
+            </RouterLink>
+          </div>
         </div>
+        <!-- <tr class="h-12 w-full border-y-[1px]" v-for="(quake, index) in quakeData" :key="index">
+            <td>{{ index + 1 }}</td>
+            <td>{{ quake.time }}</td>
+            <td>{{ quake.mag }}</td>
+            <td>{{ quake.lat }}</td>
+            <td>{{ quake.lon }}</td>
+            <td>{{ quake.depth }}</td>
+          </tr> -->
       </section>
     </main>
   </div>
@@ -123,19 +126,19 @@ const overlayContent = ref({
 // Function to get the color class for the earthquake marker,
 // based on its magnitude. 
 function getColorClass(mag) {
-    if (mag <= 2.0) {
-        return '#bbf7d0';
-    } else if (mag <= 3.0) {
-        return '#99f6e4';
-    } else if (mag <= 4.0) {
-        return '#a5f3fc';
-    } else if (mag <= 5.0) {
-        return '#bfdbfe';
-    } else if (mag <= 6.0) {
-        return '#c17777';
-    } else {
-        return '#a73b3b';
-    }
+  if (mag <= 2.0) {
+    return '#bbf7d0';
+  } else if (mag <= 3.0) {
+    return '#99f6e4';
+  } else if (mag <= 4.0) {
+    return '#a5f3fc';
+  } else if (mag <= 5.0) {
+    return '#bfdbfe';
+  } else if (mag <= 6.0) {
+    return '#c17777';
+  } else {
+    return '#a73b3b';
+  }
 }
 
 // The onMounted hook runs when the component is mounted to the website DOM,
@@ -256,23 +259,26 @@ onMounted(() => {
       if (features.length > 0) {
         // Loop through all features and map the following properties to the quakeData array, as a new object: lon, lat, depth, mag, time.
         quakeData.value = features.map(feature => {
-          let { lon, lat, depth, mag, time } = feature.getProperties();
-          console.log(mag)
+          let { lon, lat, depth, mag, time, flynn_region, unid } = feature.getProperties();
           lon = `${lon}°N`;
           lat = `${lat}°E`;
           depth = `${depth.toFixed(1)} km`;
-          mag = `M=${mag.toFixed(1)}`;
+          mag = mag.toFixed(1);
+
           const formattedTime = new Date(time).toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false });
           const formattedDate = new Date(time).toLocaleDateString();
           time = `${formattedTime} ${formattedDate}`;
+
           return {
             lon,
             lat,
             depth,
             mag,
-            time
+            time,
+            place: flynn_region,
+            id: unid
           }
-        });
+        }).sort((a, b) => new Date(b.time) - new Date(a.time));
       }
     });
 

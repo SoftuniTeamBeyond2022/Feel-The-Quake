@@ -28,17 +28,17 @@
         </div>
         <section class="absolute h-[40rem] flex flex-col w-full bg-white bg-opacity-90 rounded-t-[2.5rem] transition-transform duration-500"
             :style="{ transform: !isCardVisible ? 'translateY(calc(100vh - 8rem))' : 'translateY(calc(100vh - 26rem))' }">
-            <div class="relative flex p-6 gap-5" :class="{ 'invisible': isLoading }"
+            <div class="relative flex p-4 gap-2" :class="{ 'invisible': isLoading }"
                 @click="isCardVisible = !isCardVisible">
-                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-5 font-bold text-cyan-700 shadow"
+                <p class="flex items-center justify-center aspect-square rounded-full text-center text-2xl p-1 w-20 h-20 font-bold text-cyan-700 shadow"
                     :style="{ 'background-color': getColorClass(cardContent.mag) }">
                     {{ cardContent.mag.toFixed(1) }}
                 </p>
-                <div class="flex flex-col w-[50%] justify-center">
-                    <h1 class="font-semibold truncate text-quakeGreen-dark mb-1 ml-2 text-xl">{{ cardContent.place }}</h1>
-                    <p class="ml-2 truncate text-quakeGreen">{{ cardContent.time.toLocaleDateString() }}</p>
+                <div class="flex flex-col justify-center">
+                    <h1 class="font-semibold text-quakeGreen-dark mb-1 ml-2 text-base whitespace-normal break-normal">{{ cardContent.place }}</h1>
+                    <p class="ml-2 truncate text-quakeGreen text-sm">{{ cardContent.time.toLocaleDateString() }}</p>
                 </div>
-                <Icon class="mb-1 text-4xl text-quakeGreen transition-transform duration-500" icon="fa6-solid:chevron-up"
+                <Icon class="ml-auto w-12 mb-1 text-4xl text-quakeGreen transition-transform duration-500" icon="fa6-solid:chevron-up"
                     :class="{ 'rotate-180': isCardVisible }" />
             </div>
             <ul class="text-quakeGreen-dark text-opacity-90 mx-8 pt-4 pb-14 flex flex-col gap-2"
